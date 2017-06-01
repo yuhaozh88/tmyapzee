@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_setting"
@@ -12,4 +12,101 @@
     tools:context="nkser.tmpayzee.SettingsActivity"
     android:background="@drawable/background">
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/backbutton"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_weight="3"
+        android:background="@drawable/backbutton"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="7"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/setting"
+            android:layout_width="250dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center"
+            android:background="@drawable/setting"
+            />
+        <ImageView
+            android:id="@+id/volume"
+            android:layout_width="175dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="25dp"
+            android:background="@drawable/volume"
+            />
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="42dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+            <Button
+                android:id="@+id/volumedown"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="3"
+                android:layout_width="5dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/volumedown"
+                />
+            <TextView
+                android:layout_width="5dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"/>
+            <Button
+                android:id="@+id/volumeup"
+                android:layout_gravity="center_vertical"
+                android:layout_width="5dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:background="@drawable/volumeup"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/wordbutton"
+            android:layout_width="175dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="25dp"
+            android:src="@drawable/wordbook"
+            />
+        <RadioGroup
+            android:layout_width="283dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+            <RadioButton
+                android:id="@+id/choosetoefl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TOEFL"
+                android:textColor="#00d7fe"
+                />
+            <RadioButton
+                android:id="@+id/choosegaokao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="高考3500词"
+                android:textColor="#00d7fe"/>
+            <!--<RadioButton
+                android:id="@+id/choosegre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GRE"
+                android:textColor="#00d7fe"/>-->
+            <RadioButton
+                android:id="@+id/choosecet4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CET4"
+                android:textColor="#00d7fe"/>
+            <RadioButton
+                android:id="@+id/choosecet6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CET6"
+                android:textColor="#00d7fe"/>
+        </RadioGroup>
+    </LinearLayout>
+</LinearLayout>

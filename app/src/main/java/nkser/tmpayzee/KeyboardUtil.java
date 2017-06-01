@@ -16,7 +16,7 @@ public class KeyboardUtil {
 	private GameActivity act;
 	private KeyboardView keyboardView;
 	private Keyboard k1;// 字母键盘
-
+	private GlobalValues globalV;
 
 	public KeyboardUtil(GameActivity act, Context ctx) {
 		this.act = act;
@@ -27,6 +27,7 @@ public class KeyboardUtil {
 		keyboardView.setEnabled(true);
 		keyboardView.setPreviewEnabled(false);
 		keyboardView.setOnKeyboardActionListener(listener);
+		globalV = new GlobalValues();
 	}
 
 	private OnKeyboardActionListener listener = new OnKeyboardActionListener() {
@@ -73,32 +74,35 @@ public class KeyboardUtil {
 
 					GlobalValues globalV = (GlobalValues) act.getApplication();
 					if (act.strPos[i] == tempStr.length()){
-						new functions().refreshWords(ctx, act,tvArr);
-						Log.e("maze", Integer.toString(globalV.maze[act.coordinate_x][act.coordinate_y][0])+
-								Integer.toString(globalV.maze[act.coordinate_x][act.coordinate_y][1])+
-								Integer.toString(globalV.maze[act.coordinate_x][act.coordinate_y][2])+
-								Integer.toString(globalV.maze[act.coordinate_x][act.coordinate_y][3]));
-						if (globalV.maze[act.coordinate_x][act.coordinate_y][i]==1) {
+
+						globalV.refreshWords(ctx, act);
+//						new functions().refreshWords(ctx, act,tvArr);
+						Log.e("maze", Integer.toString(globalV.maze[globalV.coordinate_x][globalV.coordinate_y][0])+
+								Integer.toString(globalV.maze[globalV.coordinate_x][globalV.coordinate_y][1])+
+								Integer.toString(globalV.maze[globalV.coordinate_x][globalV.coordinate_y][2])+
+								Integer.toString(globalV.maze[globalV.coordinate_x][globalV.coordinate_y][3]));
+						if (globalV.maze[globalV.coordinate_x][globalV.coordinate_y][i]==1) {
 							switch (i) {
 								case 0 :
-									act.coordinate_y--;
-									Log.e("coord ",Integer.toString(act.coordinate_x) + " "+Integer.toString(act.coordinate_y));
+									globalV.coordinate_y--;
+									Log.e("coord ",Integer.toString(globalV.coordinate_x) + " "+Integer.toString(globalV.coordinate_y));
 									break;
 								case 1:
-									act.coordinate_y++;
-									Log.e("coord ",Integer.toString(act.coordinate_x) + " "+Integer.toString(act.coordinate_y));
+									globalV.coordinate_y++;
+									Log.e("coord ",Integer.toString(globalV.coordinate_x) + " "+Integer.toString(globalV.coordinate_y));
 									break;
 								case 2:
-									act.coordinate_x--;
-									Log.e("coord ",Integer.toString(act.coordinate_x) + " "+Integer.toString(act.coordinate_y));
+									globalV.coordinate_x--;
+									Log.e("coord ",Integer.toString(globalV.coordinate_x) + " "+Integer.toString(globalV.coordinate_y));
 									break;
 								case 3:
-									act.coordinate_x++;
-									Log.e("coord ",Integer.toString(act.coordinate_x) + " "+Integer.toString(act.coordinate_y));
+									globalV.coordinate_x++;
+									Log.e("coord ",Integer.toString(globalV.coordinate_x) + " "+Integer.toString(globalV.coordinate_y));
 									break;
 							}
 
-							new functions().refreshLocation(act);
+							globalV.refreshLocation(act);
+//							new functions().refreshLocation(act);
 						}
 
 						break;

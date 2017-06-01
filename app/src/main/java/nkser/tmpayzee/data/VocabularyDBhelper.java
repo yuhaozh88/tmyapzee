@@ -111,7 +111,6 @@ public class VocabularyDBhelper extends SQLiteOpenHelper {
 	}
 
 	public void openDataBase() throws SQLException {
-
 		//Open the database
 		String myPath = DATABASE_PATH + DATABASE_NAME;
 		myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
@@ -125,61 +124,11 @@ public class VocabularyDBhelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase sqLiteDatabase) {
-		/*
-		sqLiteDatabase.close();
-		try {
-			InputStream myInput = myContext.getResources().openRawResource(R.raw.vocabulary);
-			//Open your local db as the input stream
 
-			// Path to the just created empty db
-			String outFileName = DATABASE_PATH + DATABASE_NAME;
-
-			//Open the empty db as the output stream
-			OutputStream myOutput = new FileOutputStream(outFileName);
-
-			//transfer bytes from the inputfile to the outputfile
-			byte[] buffer = new byte[1024];
-			int length;
-			while ((length = myInput.read(buffer)) > 0) {
-				myOutput.write(buffer, 0, length);
-			}
-
-			//Close the streams
-			myOutput.flush();
-			myOutput.close();
-			myInput.close();
-		}
-		catch (IOException e){
-			Log.e("CAO","FILE NOT FOUND");
-		}
-		*/
-
-		/*
-		final String SQL_CREATE_VOCABULARY_TABLE =
-				"CREATE TABLE " + VocabularyContract.VocabularyEntry.TABLE_NAME + " ("+
-						VocabularyContract.VocabularyEntry.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-						VocabularyContract.VocabularyEntry.COLUMN_VOCABULARY + " VARCHAR(30) NOT NULL, " +
-						VocabularyContract.VocabularyEntry.COLUMN_LEVEL + " INTEGER NOT NULL, " +
-						" FOREIGN KEY (" + VocabularyContract.VocabularyEntry.COLUMN_BELONGING + ") REFERENCES "+
-						VocabularyContract.LexiconEntry.TABLE_NAME + " (" + VocabularyContract.LexiconEntry.COLUMN_NAME + "); ";
-
-		final String SQL_CREATE_LEXICON_TABLE =
-				"CREATE TABLE " + VocabularyContract.LexiconEntry.TABLE_NAME + " ("+
-						VocabularyContract.LexiconEntry.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-						VocabularyContract.LexiconEntry.COLUMN_NAME + " VARCHAR(20) NOT NULL, " +
-						VocabularyContract.LexiconEntry.COLUMN_NUM + " INTEGER NOT NULL); ";
-
-		sqLiteDatabase.execSQL(SQL_CREATE_LEXICON_TABLE);
-		sqLiteDatabase.execSQL(SQL_CREATE_VOCABULARY_TABLE);
-		*/
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-		/*
-		sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + VocabularyContract.LexiconEntry.TABLE_NAME);
-		sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + VocabularyContract.VocabularyEntry.TABLE_NAME);
-		onCreate(sqLiteDatabase);
-		*/
+
 	}
 }

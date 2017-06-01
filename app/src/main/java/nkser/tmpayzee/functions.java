@@ -1,6 +1,8 @@
 package nkser.tmpayzee;
 
+import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.TextAppearanceSpan;
@@ -11,18 +13,31 @@ import android.widget.TextView;
 
 import java.util.Random;
 
+import android.content.SharedPreferences;
+
 import static android.R.attr.width;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Adam_Yang on 2017/5/13.
  */
+public class functions extends Application{
 
-public class functions {
-
+/*
 	private static final float wallSize = 23;
 	private static final float gridSize = 72;
 	private static final int gridSizeW = 72;
 	private static final int mazeMapSizeInDp = 300;
+	SharedPreferences sharedPref;
+
+	private static Context context;
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		context = getApplicationContext();
+	}
 
 	void refreshWords(Context context, GameActivity act, TextView[] textViewArr ){
 		//get Random Nums
@@ -67,33 +82,32 @@ public class functions {
 		float mapCoorX = mazeMap.getLeft();
 		float mapCoorY = mazeMap.getTop();
 
-		//calculate the coordinates
-//		int w = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.EXACTLY);
-//		int h = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.EXACTLY);
-//		mazeMap.measure(w, h);
-//		int height =mazeMap.getMeasuredHeight();
-//		int width =mazeMap.getMeasuredWidth();
-
-//		w=mazeMap.getMeasuredHeight();
-//		h=mazeMap.getMeasuredWidth();
-
 		//-5 ----experiment result
+		sharedPref = context.getSharedPreferences("game_info", MODE_PRIVATE);
+		float unitW = sharedPref.getFloat("unitW", -1);
+		float unitH = sharedPref.getFloat("unitH", -1);
 
-		float unitW = ((mazeMap.getBottom()-mazeMap.getTop()/(11*wallSize+10*gridSize)*(wallSize+gridSize))-5;
-		float unitH = ((mazeMap.getBottom()-mazeMap.getTop()/(11*wallSize+10*gridSize)*(wallSize+gridSize))-5;
+		if (unitW == -1 || unitH == -1) {
+			unitW = ((mazeMap.getBottom() - mazeMap.getTop()) / (11 * wallSize + 10 * gridSize) * (wallSize + gridSize));
+			unitH = ((mazeMap.getBottom() - mazeMap.getTop()) / (11 * wallSize + 10 * gridSize) * (wallSize + gridSize)) - 5;
+			SharedPreferences.Editor edit = sharedPref.edit();
+			edit.putFloat("unitW",unitW);
+			edit.putFloat("unitH",unitH);
+		}
+
 //		float unitH = ((mazeMap.getBottom()-mazeMap.getTop())/(11*wallSize+10*gridSize)*(wallSize+gridSize));
-		//int unitH = (int)(mazeMapSizeInDp*density/(11*wallSize+10*gridSizeH) * (wallSize+gridSizeH));
 		//X\Y bias = 40
 		float x = 40+mapCoorX + (act.coordinate_x-1)*unitW;
-		float y = 40+mapCoorY + (act.coordinate_y-1)*unitH;
+		float y = 40+mapCoorY + (globalV.coordinate_y-1)*unitH;
 //		Log.e("X ", .toString(x));
 
-		Log.e("unitH ", Float.toString(unitH));
+		Log.e("x ", Float.toString(x));
 		Log.e("Y ", Float.toString(y));
 		plane.setTranslationX(x);
 		plane.setTranslationY(y);
 
+		Log.e("coor_x_y",Integer.toString(globalV.coordinate_x)+" "+Integer.toString(globalV.coordinate_y));
 	//	plane.setForeground(R.drawable.plane);
 	}
-
+*/
 }

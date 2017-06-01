@@ -2,6 +2,7 @@ package nkser.tmpayzee;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,6 +21,19 @@ public class MainActivity extends Activity {
 		/*
 			Set intent
 		 */
+
+		if (! GlobalValues.situation){
+			GlobalValues.volume=0.5f;
+			GlobalValues.player=new MediaPlayer();
+			GlobalValues.player=MediaPlayer.create(MainActivity.this,R.raw.bgm);//创建媒体播放器
+			GlobalValues.player.setLooping(true);
+			GlobalValues.player.setVolume(GlobalValues.volume,GlobalValues.volume);
+			GlobalValues.situation=true;
+		}
+
+		GlobalValues.player.start();
+
+
 		ImageView image_start = (ImageView) findViewById(R.id.main_start);
 		image_start.setOnClickListener(new View.OnClickListener()
 		{
@@ -59,8 +73,7 @@ public class MainActivity extends Activity {
 				finish();
 			}
 		});
-
-
+		
 		dBhelper = new VocabularyDBhelper(getBaseContext());
 	}
 

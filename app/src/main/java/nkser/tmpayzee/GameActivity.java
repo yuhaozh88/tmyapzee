@@ -1,25 +1,40 @@
 package nkser.tmpayzee;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.Image;
+import android.net.sip.SipAudioCall;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import nkser.tmpayzee.data.VocabularyDBhelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import android.os.Handler;
+import android.os.Bundle;
+
+import static java.util.logging.Logger.GLOBAL_LOGGER_NAME;
+import static java.util.logging.Logger.global;
+import static nkser.tmpayzee.R.id.pauseIcon;
 
 public class GameActivity extends Activity {
 	private SharedPreferences pref;
-	public int coordinate_x;
-	public int coordinate_y;
 	private int level;
-	private boolean resume_or_not;
 	private String lexicon;
+	private String timeStr = "";
+	private Handler mHandler = new Handler();
+	private TextView tv_timer;
+	private GlobalValues globalV;
+
 	public int[] strPos;
 	public TextView textViewLeft;
 	public TextView textViewRight;
@@ -29,31 +44,57 @@ public class GameActivity extends Activity {
 	public TextView[] textViewArr;
 	public String[] currWordsArr =null;
 
+	private void countTimer(){
+		mHandler.postDelayed(TimerRunnable, 1000);
+	}
+
+	private Runnable TimerRunnable = new Runnable() {
+
+		@Override
+		public void run() {
+			if (!globalV.IsPaused) {
+				globalV.timer -= 1;
+				Long temptime = globalV.timer;
+				timeStr = Long.toString(temptime / 600);
+				temptime = temptime % 600;
+				timeStr += Long.toString(temptime / 60);
+				timeStr += " : ";
+				temptime = temptime % 60;
+				timeStr += Long.toString(temptime / 10);
+				temptime = temptime % 10;
+				timeStr += Long.toString(temptime);
+				tv_timer.setText(timeStr);
+				if (globalV.timer == 0) {
+
+				}
+			}
+			countTimer();
+		}
+	};
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
 
 
-		GlobalValues globalV = (GlobalValues) getApplication();
-
+		globalV = (GlobalValues) getApplication();
 
 		pref = getSharedPreferences("game_info",MODE_PRIVATE);
-		resume_or_not = pref.getBoolean("resume_or_not",false);
+		globalV.resume_or_not = pref.getBoolean("resume_or_not",false);
 		lexicon = pref.getString("lexicon","cet6");
-		coordinate_x = pref.getInt("coor_x",1);
-		coordinate_y = pref.getInt("coor_y",1);
+		globalV.coordinate_x = pref.getInt("coor_x",1);
+		globalV.coordinate_y = pref.getInt("coor_y",1);
 		level = pref.getInt("level",3);
 
-		if (!resume_or_not){
-			coordinate_x=globalV.mazeStart[level][1];
-			coordinate_y=globalV.mazeStart[level][0];
-//			coordinate_x=1;
-//			coordinate_y=1;
+		if (!globalV.resume_or_not){
+			//coordinate_x=globalV.mazeStart[level][1];
+			//coordinate_y=globalV.mazeStart[level][0];
+			globalV.coordinate_x =1;
+			globalV.coordinate_y =1;
 			level=1;
-			Log.e("coor_x_y",Integer.toString(coordinate_x)+" "+Integer.toString(coordinate_y));
+			Log.e("coor_x_y",Integer.toString(globalV.coordinate_x)+" "+Integer.toString(globalV.coordinate_y));
 		}
-
 
 		VocabularyDBhelper dBhelper= new VocabularyDBhelper(this);
 		try {
@@ -112,8 +153,33 @@ public class GameActivity extends Activity {
 		strPos = new int[4];
 		currWordsArr = new String[4];
 
-		new functions().refreshWords(this,this,textViewArr);
-		new functions().refreshLocation(this);
+		globalV.refreshWords(this,this);
+		globalV.refreshLocation(this);
+
+		globalV.IsPaused =false;
+		globalV.timer = globalV.timeRestrict;
+		tv_timer = (TextView) findViewById(R.id.tv_timer);
+		countTimer();
+
+		ImageView pauseIcon = (ImageView)findViewById(R.id.pauseIcon);
+		class templistener implements View.OnClickListener
+		{
+			GameActivity parentContext;
+			templistener(GameActivity ga){
+				parentContext = ga;
+			}
+			@Override
+			public void onClick(View view) {
+				final GameDialog tempdialog= new GameDialog(parentContext);
+				tempdialog.setOwnerActivity(parentContext);
+				globalV.IsPaused = true;
+				tempdialog.show();
+				tempdialog.setClicklistener();
+
+				tempdialog.setCancelable(false);
+			}
+		}
+		pauseIcon.setOnClickListener(new templistener(this));
 
 	}
 
@@ -124,10 +190,10 @@ public class GameActivity extends Activity {
 		SharedPreferences.Editor editor = pref.edit();
 
 		editor.putString("lexicon",lexicon);
-		editor.putInt("coor_x",coordinate_x);
-		editor.putInt("coor_y",coordinate_y);
+		editor.putInt("coor_x",globalV.coordinate_x);
+		editor.putInt("coor_y",globalV.coordinate_y);
 		editor.putInt("level",level);
-		editor.putBoolean("resume_or_not",resume_or_not);
+		editor.putBoolean("resume_or_not",globalV.resume_or_not);
 		editor.apply();
 
 		super.onDestroy();
@@ -136,7 +202,15 @@ public class GameActivity extends Activity {
 	@Override
 	protected  void onPause(){
 		super.onPause();
+		globalV.IsPaused= true;
 	}
 
-
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK) {
+			this.finish();
+			globalV.resume_or_not=true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 }
