@@ -31,6 +31,7 @@ public class GameDialog extends Dialog {
 	private ImageView resumeButton;
 	private ImageView restartButton;
 	private ImageView menuButton;
+	private Button muteButton;
 
 	private ClickListenerInterface clickListenerInterface;
 
@@ -51,7 +52,6 @@ public class GameDialog extends Dialog {
 			public void doResume() {
 				dismiss();
 				globalV.IsPaused=false;
-				act.countTimer();
 			}
 
 			@Override
@@ -59,7 +59,6 @@ public class GameDialog extends Dialog {
 				globalV.coordinate_x =globalV.start_x;
 				globalV.coordinate_y =globalV.start_y;
 				globalV.IsPaused = false;
-				act.countTimer();
 				globalV.timer=globalV.timeRestrict;
 				globalV.refreshLocation((GameActivity) getOwnerActivity());
 				globalV.refreshWords(getOwnerActivity(),(GameActivity) getOwnerActivity());
@@ -91,6 +90,14 @@ public class GameDialog extends Dialog {
 				case R.id.pause_resume_button:
 					clickListenerInterface.doResume();
 					break;
+				case R.id.pause_mute_button:
+					if (GlobalValues.player.isPlaying()){
+						GlobalValues.player.pause();
+					}
+					else{
+						GlobalValues.player.start();
+					}
+					break;
 			}
 		}
 
@@ -115,10 +122,12 @@ public class GameDialog extends Dialog {
 		resumeButton = (ImageView) view.findViewById(R.id.pause_resume_button);
 		restartButton  = (ImageView) view.findViewById(R.id.pause_restart_button);
 		menuButton  = (ImageView) view.findViewById(R.id.pause_menu_button);
+		muteButton =(Button) view.findViewById(R.id.pause_mute_button);
 
 		resumeButton.setOnClickListener(new clickListener());
 		restartButton.setOnClickListener(new clickListener());
 		menuButton.setOnClickListener(new clickListener());
+		muteButton.setOnClickListener(new clickListener());
 
 		Window dialogWindow = getWindow();
 		WindowManager.LayoutParams lp = dialogWindow.getAttributes();

@@ -50,6 +50,8 @@ public class GameActivity extends Activity {
 
 		@Override
 		public void run() {
+
+			if (!globalV.IsPaused){
 				globalV.timer -= 1;
 				Long temptime = globalV.timer;
 				timeStr = Long.toString(temptime / 600);
@@ -69,10 +71,9 @@ public class GameActivity extends Activity {
 					tempdialog.show();
 					tempdialog.setCancelable(false);
 				}
-
-		if (!globalV.IsPaused){
+			}
 			countTimer();
-		}
+
 		}
 	};
 
@@ -156,9 +157,13 @@ public class GameActivity extends Activity {
 	}
 
 	@Override
+	protected void onResume() {
+		GlobalValues.player.start();
+		super.onResume();
+	}
+
+	@Override
 	protected  void onDestroy() {
-
-
 
 		pref = getSharedPreferences("game_info", MODE_PRIVATE);
 		SharedPreferences.Editor editor = pref.edit();
@@ -174,6 +179,7 @@ public class GameActivity extends Activity {
 
 	@Override
 	protected  void onPause(){
+		GlobalValues.player.pause();
 		super.onPause();
 		globalV.IsPaused= true;
 	}

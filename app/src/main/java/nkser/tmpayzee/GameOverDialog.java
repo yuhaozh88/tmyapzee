@@ -33,6 +33,7 @@ public class GameOverDialog extends Dialog {
 	Context context;
 	GlobalValues globalV;
 	SharedPreferences sharedPreferences;
+	GameActivity act;
 
 	private TextView title;
 
@@ -56,8 +57,8 @@ public class GameOverDialog extends Dialog {
 		ClickListenerInterface inter = new ClickListenerInterface() {
 			@Override
 			public void doRestart() {
-				globalV.coordinate_x =1;
-				globalV.coordinate_y =1;
+				globalV.coordinate_x =globalV.start_x;
+				globalV.coordinate_y =globalV.start_y;
 				globalV.level =1;
 				globalV.IsPaused = false;
 				globalV.timer=globalV.timeRestrict;
@@ -108,6 +109,8 @@ public class GameOverDialog extends Dialog {
 
 		globalV = (GlobalValues)getOwnerActivity().getApplication();
 		sharedPreferences = getOwnerActivity().getSharedPreferences("game_info",MODE_PRIVATE);
+
+		act = (GameActivity) getOwnerActivity();
 
 		restartButton  = (ImageView) view.findViewById(R.id.over_restart_button);
 		menuButton  = (ImageView) view.findViewById(R.id.over_menu_button);

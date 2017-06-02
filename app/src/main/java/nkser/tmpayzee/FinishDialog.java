@@ -29,6 +29,7 @@ public class FinishDialog extends Dialog {
 	private ImageView continueButton;
 	private ImageView restartButton;
 	private ImageView menuButton;
+	private TextView scoreText;
 
 	private ClickListenerInterface clickListenerInterface;
 
@@ -52,9 +53,9 @@ public class FinishDialog extends Dialog {
 				globalV.level++;
 				ImageView mazeImg = (ImageView)getOwnerActivity().findViewById(R.id.mazeMap);
 				mazeImg.setImageResource(globalV.img[globalV.level-1]);
-
-				globalV.refreshWordsLib();
 				globalV.timer = globalV.timeRestrict;
+				globalV.IsPaused = false;
+				globalV.refreshWordsLib();
 				//act.countTimer();
 				globalV.refreshLocation((GameActivity) getOwnerActivity());
 				globalV.refreshWords(getOwnerActivity(), (GameActivity) getOwnerActivity());
@@ -64,9 +65,9 @@ public class FinishDialog extends Dialog {
 			@Override
 			public void doRestart() {
 				globalV.level = 1;
+				globalV.IsPaused = false;
 				globalV.refreshWordsLib();
 				globalV.refreshLocation((GameActivity) getOwnerActivity());
-				act.countTimer();
 				globalV.refreshWords(getOwnerActivity(), (GameActivity) getOwnerActivity());
 				dismiss();
 			}
@@ -121,6 +122,9 @@ public class FinishDialog extends Dialog {
 		restartButton = (ImageView) view.findViewById(R.id.finish_restart_button);
 		menuButton = (ImageView) view.findViewById(R.id.finish_menu_button);
 
+		scoreText = (TextView) view.findViewById(R.id.score_text);
+		int score = (int)(Math.sqrt((double)(globalV.level))*globalV.timer);
+		scoreText.setText(Integer.toString(score));
 
 		globalV.coordinate_x = globalV.start_x;
 		globalV.coordinate_y = globalV.start_y;

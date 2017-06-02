@@ -24,8 +24,10 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="60dp"
             android:gravity="center"
             android:orientation="vertical">
+
 
             <ImageView
                 android:id="@+id/pause_resume_button"
@@ -52,6 +54,14 @@
                 android:gravity="center"
                 android:src="@drawable/menu" />
 
+            <Button
+                android:id="@+id/pause_mute_button"
+                android:layout_width="114.0dp"
+                android:layout_height="40.0dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorAccent"
+                android:gravity="center"
+                android:text="MUTE"/>
         </LinearLayout>
     </LinearLayout>
 

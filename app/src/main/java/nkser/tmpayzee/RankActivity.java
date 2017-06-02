@@ -46,4 +46,17 @@ public class RankActivity extends Activity {
 			}
 		});
 	}
+
+	@Override
+	protected void onPause() {
+		GlobalValues.player.pause();
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		GlobalValues.player.start();
+		super.onResume();
+	}
+
 }

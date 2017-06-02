@@ -67,6 +67,15 @@ public class MainActivity extends Activity {
 		});
 
 		ImageView image_rank = (ImageView) findViewById(R.id.main_rank);
+		image_rank.setOnClickListener(new View.OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				Intent intent=new Intent(MainActivity.this, RankActivity.class);
+				GlobalValues.player.pause();
+				startActivity(intent);
+			}
+		});
+
 		ImageView image_quit = (ImageView) findViewById(R.id.main_quit);
 		image_quit.setOnClickListener(new View.OnClickListener()
 		{
@@ -79,4 +88,22 @@ public class MainActivity extends Activity {
 		dBhelper = new VocabularyDBhelper(getBaseContext());
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		GlobalValues.situation=false;
+		GlobalValues.player.stop();
+	}
+
+	@Override
+	protected void onResume() {
+		GlobalValues.player.start();
+		super.onResume();
+	}
+
+	@Override
+	protected void onPause() {
+		GlobalValues.player.pause();
+		super.onPause();
+	}
 }

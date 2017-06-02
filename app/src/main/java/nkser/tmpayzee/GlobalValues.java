@@ -28,7 +28,7 @@ import static android.R.attr.level;
 public class GlobalValues extends Application {
 	public final int mazeStart[][]={{9,1},{9,1},{4,1},{6,1}};
 	public final int mazeDestination[][]={{1,10},{6,10},{2,10},{4,10}};
-	public final int start_x = 9;
+	public final int start_x = 1;
 	public final int start_y = 1;
 
 	public int img[];
@@ -45,7 +45,7 @@ public class GlobalValues extends Application {
 	public int coordinate_y;
 	public boolean resume_or_not;
 	public long timer;
-	public final long timeRestrict = 200;
+	public final long timeRestrict = 250;
 	public int level;
 	public String lexicon;
 	public ArrayList<String> words=null;
@@ -69,9 +69,10 @@ public class GlobalValues extends Application {
 		int intRd = 0; //存放随机数
 		int count = 0; //记录生成的随机数个数
 		int flag = 0; //是否已经生成过标志
+		int wordsSize = words.size();
 		while(count<4) {
 			Random rdm = new Random(System.currentTimeMillis());
-			intRd = Math.abs(rdm.nextInt()) % 32 + 1;
+			intRd = Math.abs(rdm.nextInt()) % wordsSize;
 			for (int i = 0; i < count; i++) {
 				if (index[i] == intRd) {
 					flag = 1;
