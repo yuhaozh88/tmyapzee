@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
 				finish();
 			}
 		});
-		
+
 		dBhelper = new VocabularyDBhelper(getBaseContext());
 	}
 

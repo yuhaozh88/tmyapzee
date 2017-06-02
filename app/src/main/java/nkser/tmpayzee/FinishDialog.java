@@ -1,6 +1,5 @@
 package nkser.tmpayzee;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -11,70 +10,65 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import static android.R.attr.level;
 import static android.content.Context.MODE_PRIVATE;
-import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
 
 /**
- * Created by Adam_Yang on 2017/5/31.
+ * Created by Adam_Yang on 2017/6/2.
  */
 
-public class GameDialog extends Dialog {
+public class FinishDialog extends Dialog {
+
 	Context context;
 	GlobalValues globalV;
 	SharedPreferences sharedPreferences;
 	GameActivity act;
 
-	private TextView title;
-
-	private ImageView resumeButton;
+	private ImageView continueButton;
 	private ImageView restartButton;
 	private ImageView menuButton;
 
 	private ClickListenerInterface clickListenerInterface;
 
-	public GameDialog(Context context) {
+	public FinishDialog(Context context) {
 		super(context);
 		this.context = context;
-//		setCustomDialog();
 	}
 
 	public interface ClickListenerInterface {
-		void doResume();
+		void doContinue();
+
 		void doRestart();
+
 		void doMenu();
 	}
 
 	public void setClicklistener() {
 		ClickListenerInterface inter = new ClickListenerInterface() {
 			@Override
-			public void doResume() {
-				dismiss();
-				globalV.IsPaused=false;
+			public void doContinue() {
+				globalV.level++;
+				globalV.resume_or_not = true;
 				act.countTimer();
+				globalV.refreshLocation((GameActivity) getOwnerActivity());
+				globalV.refreshWords(getOwnerActivity(), (GameActivity) getOwnerActivity());
+				dismiss();
 			}
 
 			@Override
 			public void doRestart() {
-				globalV.coordinate_x =1;
-				globalV.coordinate_y =1;
 				globalV.resume_or_not = false;
-				globalV.IsPaused = false;
-				act.countTimer();
-				globalV.timer=globalV.timeRestrict;
 				globalV.refreshLocation((GameActivity) getOwnerActivity());
-				globalV.refreshWords(getOwnerActivity(),(GameActivity) getOwnerActivity());
+				act.countTimer();
+				globalV.refreshWords(getOwnerActivity(), (GameActivity) getOwnerActivity());
 				dismiss();
 			}
 
 			@Override
 			public void doMenu() {
-				Intent intent = new Intent(getOwnerActivity(),MainActivity.class);
+				Intent intent = new Intent(getOwnerActivity(), MainActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 				getOwnerActivity().startActivity(intent);
 			}
@@ -88,14 +82,14 @@ public class GameDialog extends Dialog {
 			// TODO Auto-generated method stub
 			int id = v.getId();
 			switch (id) {
-				case R.id.pause_menu_button:
+				case R.id.finish_menu_button:
 					clickListenerInterface.doMenu();
 					break;
-				case R.id.pause_restart_button:
+				case R.id.finish_restart_button:
 					clickListenerInterface.doRestart();
 					break;
-				case R.id.pause_resume_button:
-					clickListenerInterface.doResume();
+				case R.id.finish_continue_button:
+					clickListenerInterface.doContinue();
 					break;
 			}
 		}
@@ -111,27 +105,35 @@ public class GameDialog extends Dialog {
 
 	public void init() {
 		LayoutInflater inflater = LayoutInflater.from(context);
-		View view = inflater.inflate(R.layout.pausedialog, null);
+		View view = inflater.inflate(R.layout.dialog_finish, null);
 		setContentView(view);
 
-		globalV = (GlobalValues)getOwnerActivity().getApplication();
+		globalV = (GlobalValues) getOwnerActivity().getApplication();
 		act = (GameActivity)getOwnerActivity();
-		sharedPreferences = getOwnerActivity().getSharedPreferences("game_info",MODE_PRIVATE);
+		sharedPreferences = getOwnerActivity().getSharedPreferences("game_info", MODE_PRIVATE);
 
-		resumeButton = (ImageView) view.findViewById(R.id.pause_resume_button);
-		restartButton  = (ImageView) view.findViewById(R.id.pause_restart_button);
-		menuButton  = (ImageView) view.findViewById(R.id.pause_menu_button);
+		continueButton = (ImageView) view.findViewById(R.id.finish_continue_button);
+		restartButton = (ImageView) view.findViewById(R.id.finish_restart_button);
+		menuButton = (ImageView) view.findViewById(R.id.finish_menu_button);
 
-		resumeButton.setOnClickListener(new clickListener());
+
+		globalV.coordinate_x = globalV.start_x;
+		globalV.coordinate_y = globalV.start_y;
+		globalV.IsPaused = false;
+		globalV.timer = globalV.timeRestrict;
+
+		if (globalV.level == 4){
+			continueButton.setVisibility(View.INVISIBLE);
+		}
+
+		continueButton.setOnClickListener(new clickListener());
 		restartButton.setOnClickListener(new clickListener());
 		menuButton.setOnClickListener(new clickListener());
 
 		Window dialogWindow = getWindow();
 		WindowManager.LayoutParams lp = dialogWindow.getAttributes();
 		DisplayMetrics d = context.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
-		lp.width = (int) (d.widthPixels * 0.9); // 高度设置为屏幕的0.6
+		lp.width = (int) (d.widthPixels*0.9); // 高度设置为屏幕的0.6
 		dialogWindow.setAttributes(lp);
 	}
-
-
 }

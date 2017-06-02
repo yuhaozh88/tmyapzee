@@ -70,13 +70,7 @@ public class VocabularyDBhelper extends SQLiteOpenHelper {
 		}catch(Exception e){
 			//database does't exist yet.
 		}
-
 		return true;
-//		if(checkDB != null){
-//			checkDB.close();
-//		}
-//
-//		return checkDB != null ? true : false;
 	}
 
 	/**
@@ -117,18 +111,11 @@ public class VocabularyDBhelper extends SQLiteOpenHelper {
 
 	}
 
-
-	public SQLiteDatabase getMyDataBase() {
-		return myDataBase;
-	}
-
 	@Override
 	public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
 	}
 }

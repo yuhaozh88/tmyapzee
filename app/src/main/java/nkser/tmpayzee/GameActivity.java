@@ -22,14 +22,13 @@ import java.util.ArrayList;
 import android.os.Handler;
 import android.os.Bundle;
 
+import static android.R.attr.level;
 import static java.util.logging.Logger.GLOBAL_LOGGER_NAME;
 import static java.util.logging.Logger.global;
 import static nkser.tmpayzee.R.id.pauseIcon;
 
 public class GameActivity extends Activity {
 	private SharedPreferences pref;
-	private int level;
-	private String lexicon;
 	private String timeStr = "";
 	private Handler mHandler = new Handler();
 	private TextView tv_timer;
@@ -40,11 +39,10 @@ public class GameActivity extends Activity {
 	public TextView textViewRight;
 	public TextView textViewUp;
 	public TextView textViewDown;
-	public ArrayList<String> words=null;
 	public TextView[] textViewArr;
 	public String[] currWordsArr =null;
 
-	private void countTimer(){
+	public void countTimer(){
 		mHandler.postDelayed(TimerRunnable, 1000);
 	}
 
@@ -52,7 +50,6 @@ public class GameActivity extends Activity {
 
 		@Override
 		public void run() {
-			if (!globalV.IsPaused) {
 				globalV.timer -= 1;
 				Long temptime = globalV.timer;
 				timeStr = Long.toString(temptime / 600);
@@ -66,9 +63,16 @@ public class GameActivity extends Activity {
 				tv_timer.setText(timeStr);
 				if (globalV.timer == 0) {
 
+					final GameOverDialog tempdialog= new GameOverDialog(GameActivity.this);
+					tempdialog.setOwnerActivity(GameActivity.this);
+					globalV.IsPaused = true;
+					tempdialog.show();
+					tempdialog.setCancelable(false);
 				}
-			}
+
+		if (!globalV.IsPaused){
 			countTimer();
+		}
 		}
 	};
 
@@ -82,17 +86,17 @@ public class GameActivity extends Activity {
 
 		pref = getSharedPreferences("game_info",MODE_PRIVATE);
 		globalV.resume_or_not = pref.getBoolean("resume_or_not",false);
-		lexicon = pref.getString("lexicon","cet6");
-		globalV.coordinate_x = pref.getInt("coor_x",1);
-		globalV.coordinate_y = pref.getInt("coor_y",1);
-		level = pref.getInt("level",3);
+		globalV.lexicon = pref.getString("lexicon","cet6");
+		globalV.coordinate_x = pref.getInt("coor_x",globalV.start_x);
+		globalV.coordinate_y = pref.getInt("coor_y",globalV.start_y);
+		globalV.level = pref.getInt("level",1);
 
 		if (!globalV.resume_or_not){
 			//coordinate_x=globalV.mazeStart[level][1];
 			//coordinate_y=globalV.mazeStart[level][0];
-			globalV.coordinate_x =1;
-			globalV.coordinate_y =1;
-			level=1;
+			globalV.coordinate_x =globalV.start_x;
+			globalV.coordinate_y =globalV.start_y;
+			globalV.level=1;
 			Log.e("coor_x_y",Integer.toString(globalV.coordinate_x)+" "+Integer.toString(globalV.coordinate_y));
 		}
 
@@ -106,39 +110,40 @@ public class GameActivity extends Activity {
 			e.printStackTrace();
 		}
 
-//		dBhelper.close();
-		SQLiteDatabase db = dBhelper.getReadableDatabase();
+////		dBhelper.close();
+//		SQLiteDatabase db = dBhelper.getReadableDatabase();
+//
+//		String[] cols = {"vocabulary"};
+//		String[] levels = {Integer.toString(level)};
+//
+//		Cursor cursor = db.query(globalV.lexicon,cols,"level = ?",levels,null,null,null);
+//
+//		globalV.words = new ArrayList<>(0);
+//		if (cursor.moveToFirst()){
+//			do {
+//				globalV.words.add(cursor.getString(cursor.getColumnIndex("vocabulary")));
+//			}
+//			while (cursor.moveToNext());
+//		}
+//		String[] mazeCols = {"location", "up","down","left","right"};
+//		cursor = db.query("maze",mazeCols,"level = ?",levels, null,null,null);
+//
+//		int[][][] mazePtr = globalV.maze;
+//		if (cursor.moveToFirst()){
+//			do {
+//				int temp_location = cursor.getInt(cursor.getColumnIndex("location"));
+//				int temp_y = (temp_location/10)+1 - (temp_location/100);
+//				int temp_x = (temp_location-1)%10+1;
+//				mazePtr[temp_x][temp_y][0] = cursor.getInt(cursor.getColumnIndex("up"));
+//				mazePtr[temp_x][temp_y][1] = cursor.getInt(cursor.getColumnIndex("down"));
+//				mazePtr[temp_x][temp_y][2] = cursor.getInt(cursor.getColumnIndex("left"));
+//				mazePtr[temp_x][temp_y][3] = cursor.getInt(cursor.getColumnIndex("right"));
+//			}
+//			while (cursor.moveToNext());
+//		}
 
-		String[] cols = {"vocabulary"};
-		String[] levels = {Integer.toString(level)};
-
-		Cursor cursor = db.query(lexicon,cols,"level = ?",levels,null,null,null);
-
-		words = new ArrayList<>(0);
-		if (cursor.moveToFirst()){
-			do {
-				words.add(cursor.getString(cursor.getColumnIndex("vocabulary")));
-			}
-			while (cursor.moveToNext());
-		}
-		String[] mazeCols = {"location", "up","down","left","right"};
-		cursor = db.query("maze",mazeCols,"level = ?",levels, null,null,null);
-
-		int[][][] mazePtr = globalV.maze;
-		if (cursor.moveToFirst()){
-			do {
-				int temp_location = cursor.getInt(cursor.getColumnIndex("location"));
-				int temp_y = (temp_location/10)+1 - (temp_location/100);
-				int temp_x = (temp_location-1)%10+1;
-				mazePtr[temp_x][temp_y][0] = cursor.getInt(cursor.getColumnIndex("up"));
-				mazePtr[temp_x][temp_y][1] = cursor.getInt(cursor.getColumnIndex("down"));
-				mazePtr[temp_x][temp_y][2] = cursor.getInt(cursor.getColumnIndex("left"));
-				mazePtr[temp_x][temp_y][3] = cursor.getInt(cursor.getColumnIndex("right"));
-			}
-			while (cursor.moveToNext());
-		}
-
-		new KeyboardUtil(this, this).showKeyboard();
+		globalV.refreshWordsLib();
+		new KeyboardUtil(globalV,this, this).showKeyboard();
 
 		textViewLeft = (TextView) findViewById(R.id.TextViewLeft);
 		textViewRight = (TextView) findViewById(R.id.TextViewRight);
@@ -159,6 +164,7 @@ public class GameActivity extends Activity {
 		globalV.IsPaused =false;
 		globalV.timer = globalV.timeRestrict;
 		tv_timer = (TextView) findViewById(R.id.tv_timer);
+
 		countTimer();
 
 		ImageView pauseIcon = (ImageView)findViewById(R.id.pauseIcon);
@@ -174,22 +180,22 @@ public class GameActivity extends Activity {
 				tempdialog.setOwnerActivity(parentContext);
 				globalV.IsPaused = true;
 				tempdialog.show();
-				tempdialog.setClicklistener();
-
 				tempdialog.setCancelable(false);
 			}
 		}
 		pauseIcon.setOnClickListener(new templistener(this));
-
+		Log.e("level ", Long.toString(globalV.level));
 	}
 
 	@Override
 	protected  void onDestroy() {
 
+
+
 		pref = getSharedPreferences("game_info", MODE_PRIVATE);
 		SharedPreferences.Editor editor = pref.edit();
 
-		editor.putString("lexicon",lexicon);
+		editor.putString("lexicon",globalV.lexicon);
 		editor.putInt("coor_x",globalV.coordinate_x);
 		editor.putInt("coor_y",globalV.coordinate_y);
 		editor.putInt("level",level);

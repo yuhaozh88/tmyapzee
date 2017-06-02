@@ -3,6 +3,8 @@ package nkser.tmpayzee;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -10,7 +12,13 @@ import android.text.style.TextAppearanceSpan;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 import java.util.Random;
+
+import nkser.tmpayzee.data.VocabularyDBhelper;
+
+import static android.R.attr.level;
 
 /**
  * Created by Adam_Yang on 2017/5/14.
@@ -19,13 +27,13 @@ import java.util.Random;
 public class GlobalValues extends Application {
 	public final int mazeStart[][]={{9,1},{9,1},{4,1},{6,1}};
 	public final int mazeDestination[][]={{1,10},{6,10},{2,10},{4,10}};
+	public final int start_x = 9;
+	public final int start_y = 1;
 
 	private static final float wallSize = 23;
 	private static final float gridSize = 72;
 
-
 	SharedPreferences sharedPref;
-
 
 	public boolean IsPaused;
 	public int[][][] maze;
@@ -34,8 +42,10 @@ public class GlobalValues extends Application {
 	public int coordinate_y;
 	public boolean resume_or_not;
 	public long timer;
-	public final long timeRestrict = 100;
-
+	public final long timeRestrict = 50;
+	public int level;
+	public String lexicon;
+	public ArrayList<String> words=null;
 
 	public static MediaPlayer player;
 	protected static boolean situation=false;
@@ -69,7 +79,7 @@ public class GlobalValues extends Application {
 		}
 		for (int i=0;i<4;i++) {
 
-			String tempWord = act.words.get(index[i]);
+			String tempWord = words.get(index[i]);
 			act.currWordsArr[i] = tempWord;
 			act.strPos[i]=0;
 			SpannableString styledText = new SpannableString(tempWord);
@@ -78,6 +88,42 @@ public class GlobalValues extends Application {
 			act.textViewArr[i].setText(styledText, TextView.BufferType.SPANNABLE);
 		}
 
+	}
+
+	void refreshWordsLib(){
+
+		VocabularyDBhelper dBhelper= new VocabularyDBhelper(this);
+
+		SQLiteDatabase db = dBhelper.getReadableDatabase();
+
+		String[] cols = {"vocabulary"};
+		String[] levels = {Integer.toString(level)};
+
+		Cursor cursor = db.query(lexicon,cols,"level = ?",levels,null,null,null);
+
+		words = new ArrayList<>(0);
+		if (cursor.moveToFirst()){
+			do {
+				words.add(cursor.getString(cursor.getColumnIndex("vocabulary")));
+			}
+			while (cursor.moveToNext());
+		}
+		String[] mazeCols = {"location", "up","down","left","right"};
+		cursor = db.query("maze",mazeCols,"level = ?",levels, null,null,null);
+
+		int[][][] mazePtr = maze;
+		if (cursor.moveToFirst()){
+			do {
+				int temp_location = cursor.getInt(cursor.getColumnIndex("location"));
+				int temp_y = (temp_location/10)+1 - (temp_location/100);
+				int temp_x = (temp_location-1)%10+1;
+				mazePtr[temp_x][temp_y][0] = cursor.getInt(cursor.getColumnIndex("up"));
+				mazePtr[temp_x][temp_y][1] = cursor.getInt(cursor.getColumnIndex("down"));
+				mazePtr[temp_x][temp_y][2] = cursor.getInt(cursor.getColumnIndex("left"));
+				mazePtr[temp_x][temp_y][3] = cursor.getInt(cursor.getColumnIndex("right"));
+			}
+			while (cursor.moveToNext());
+		}
 	}
 
 	void refreshLocation(GameActivity act){
@@ -118,6 +164,4 @@ public class GlobalValues extends Application {
 
 		Log.e("coor_x_y",Integer.toString(coordinate_x)+" "+Integer.toString(coordinate_y));
 	}
-
-
 }

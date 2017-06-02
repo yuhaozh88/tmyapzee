@@ -18,7 +18,7 @@ public class KeyboardUtil {
 	private Keyboard k1;// 字母键盘
 	private GlobalValues globalV;
 
-	public KeyboardUtil(GameActivity act, Context ctx) {
+	public KeyboardUtil(GlobalValues glv,GameActivity act, Context ctx) {
 		this.act = act;
 		this.ctx = ctx;
 		k1 = new Keyboard(ctx, R.xml.qwerty);
@@ -27,7 +27,7 @@ public class KeyboardUtil {
 		keyboardView.setEnabled(true);
 		keyboardView.setPreviewEnabled(false);
 		keyboardView.setOnKeyboardActionListener(listener);
-		globalV = new GlobalValues();
+		globalV = glv;
 	}
 
 	private OnKeyboardActionListener listener = new OnKeyboardActionListener() {
@@ -76,7 +76,7 @@ public class KeyboardUtil {
 					if (act.strPos[i] == tempStr.length()){
 
 						globalV.refreshWords(ctx, act);
-//						new functions().refreshWords(ctx, act,tvArr);
+
 						Log.e("maze", Integer.toString(globalV.maze[globalV.coordinate_x][globalV.coordinate_y][0])+
 								Integer.toString(globalV.maze[globalV.coordinate_x][globalV.coordinate_y][1])+
 								Integer.toString(globalV.maze[globalV.coordinate_x][globalV.coordinate_y][2])+
@@ -101,8 +101,16 @@ public class KeyboardUtil {
 									break;
 							}
 
+							if (globalV.coordinate_x == globalV.mazeDestination[globalV.level-1][1]
+									&& globalV.coordinate_y == globalV.mazeDestination[globalV.level-1][0]){
+
+								final FinishDialog tempdialog= new FinishDialog(act);
+								tempdialog.setOwnerActivity(act);
+								globalV.IsPaused = true;
+								tempdialog.show();
+								tempdialog.setCancelable(false);
+							}
 							globalV.refreshLocation(act);
-//							new functions().refreshLocation(act);
 						}
 
 						break;

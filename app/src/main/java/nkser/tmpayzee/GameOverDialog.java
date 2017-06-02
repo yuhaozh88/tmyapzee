@@ -1,5 +1,10 @@
 package nkser.tmpayzee;
 
+import android.app.Dialog;
+
+/**
+ * Created by Adam_Yang on 2017/6/1.
+ */
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -24,28 +29,25 @@ import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
  * Created by Adam_Yang on 2017/5/31.
  */
 
-public class GameDialog extends Dialog {
+public class GameOverDialog extends Dialog {
 	Context context;
 	GlobalValues globalV;
 	SharedPreferences sharedPreferences;
-	GameActivity act;
 
 	private TextView title;
 
-	private ImageView resumeButton;
 	private ImageView restartButton;
 	private ImageView menuButton;
 
 	private ClickListenerInterface clickListenerInterface;
 
-	public GameDialog(Context context) {
+	public GameOverDialog(Context context) {
 		super(context);
 		this.context = context;
 //		setCustomDialog();
 	}
 
 	public interface ClickListenerInterface {
-		void doResume();
 		void doRestart();
 		void doMenu();
 	}
@@ -53,20 +55,14 @@ public class GameDialog extends Dialog {
 	public void setClicklistener() {
 		ClickListenerInterface inter = new ClickListenerInterface() {
 			@Override
-			public void doResume() {
-				dismiss();
-				globalV.IsPaused=false;
-				act.countTimer();
-			}
-
-			@Override
 			public void doRestart() {
 				globalV.coordinate_x =1;
 				globalV.coordinate_y =1;
+				globalV.level =1;
 				globalV.resume_or_not = false;
 				globalV.IsPaused = false;
-				act.countTimer();
 				globalV.timer=globalV.timeRestrict;
+				globalV.refreshWordsLib();
 				globalV.refreshLocation((GameActivity) getOwnerActivity());
 				globalV.refreshWords(getOwnerActivity(),(GameActivity) getOwnerActivity());
 				dismiss();
@@ -88,14 +84,11 @@ public class GameDialog extends Dialog {
 			// TODO Auto-generated method stub
 			int id = v.getId();
 			switch (id) {
-				case R.id.pause_menu_button:
+				case R.id.over_menu_button:
 					clickListenerInterface.doMenu();
 					break;
-				case R.id.pause_restart_button:
+				case R.id.over_restart_button:
 					clickListenerInterface.doRestart();
-					break;
-				case R.id.pause_resume_button:
-					clickListenerInterface.doResume();
 					break;
 			}
 		}
@@ -111,18 +104,15 @@ public class GameDialog extends Dialog {
 
 	public void init() {
 		LayoutInflater inflater = LayoutInflater.from(context);
-		View view = inflater.inflate(R.layout.pausedialog, null);
+		View view = inflater.inflate(R.layout.dialog_gameover, null);
 		setContentView(view);
 
 		globalV = (GlobalValues)getOwnerActivity().getApplication();
-		act = (GameActivity)getOwnerActivity();
 		sharedPreferences = getOwnerActivity().getSharedPreferences("game_info",MODE_PRIVATE);
 
-		resumeButton = (ImageView) view.findViewById(R.id.pause_resume_button);
-		restartButton  = (ImageView) view.findViewById(R.id.pause_restart_button);
-		menuButton  = (ImageView) view.findViewById(R.id.pause_menu_button);
+		restartButton  = (ImageView) view.findViewById(R.id.over_restart_button);
+		menuButton  = (ImageView) view.findViewById(R.id.over_menu_button);
 
-		resumeButton.setOnClickListener(new clickListener());
 		restartButton.setOnClickListener(new clickListener());
 		menuButton.setOnClickListener(new clickListener());
 
@@ -132,6 +122,5 @@ public class GameDialog extends Dialog {
 		lp.width = (int) (d.widthPixels * 0.9); // 高度设置为屏幕的0.6
 		dialogWindow.setAttributes(lp);
 	}
-
 
 }
