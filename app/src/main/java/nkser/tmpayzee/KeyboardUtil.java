@@ -65,7 +65,7 @@ public class KeyboardUtil {
 
 			for (int i=0;i<4;i++){
 				String tempStr=act.currWordsArr[i];
-				if (tempStr.charAt(act.strPos[i]) == (char)primaryCode) {
+				if (tempStr.charAt(act.strPos[i]) == (char)primaryCode || tempStr.charAt(act.strPos[i]) == (char)(primaryCode-22)) {
 					SpannableString styledText1 = new SpannableString(tempStr);
 					act.strPos[i]++;
 					styledText1.setSpan(new TextAppearanceSpan(act, R.style.TypedCharacter), 0, act.strPos[i], Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

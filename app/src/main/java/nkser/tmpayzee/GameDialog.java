@@ -16,9 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import static android.R.attr.level;
 import static android.content.Context.MODE_PRIVATE;
-import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
 
 /**
  * Created by Adam_Yang on 2017/5/31.
@@ -30,8 +28,6 @@ public class GameDialog extends Dialog {
 	SharedPreferences sharedPreferences;
 	GameActivity act;
 
-	private TextView title;
-
 	private ImageView resumeButton;
 	private ImageView restartButton;
 	private ImageView menuButton;
@@ -41,7 +37,6 @@ public class GameDialog extends Dialog {
 	public GameDialog(Context context) {
 		super(context);
 		this.context = context;
-//		setCustomDialog();
 	}
 
 	public interface ClickListenerInterface {
@@ -61,9 +56,8 @@ public class GameDialog extends Dialog {
 
 			@Override
 			public void doRestart() {
-				globalV.coordinate_x =1;
-				globalV.coordinate_y =1;
-				globalV.resume_or_not = false;
+				globalV.coordinate_x =globalV.start_x;
+				globalV.coordinate_y =globalV.start_y;
 				globalV.IsPaused = false;
 				act.countTimer();
 				globalV.timer=globalV.timeRestrict;

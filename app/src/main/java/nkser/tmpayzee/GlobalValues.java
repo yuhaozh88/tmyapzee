@@ -2,6 +2,7 @@ package nkser.tmpayzee;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -30,6 +31,8 @@ public class GlobalValues extends Application {
 	public final int start_x = 9;
 	public final int start_y = 1;
 
+	public int img[];
+
 	private static final float wallSize = 23;
 	private static final float gridSize = 72;
 
@@ -42,7 +45,7 @@ public class GlobalValues extends Application {
 	public int coordinate_y;
 	public boolean resume_or_not;
 	public long timer;
-	public final long timeRestrict = 50;
+	public final long timeRestrict = 200;
 	public int level;
 	public String lexicon;
 	public ArrayList<String> words=null;
@@ -53,6 +56,11 @@ public class GlobalValues extends Application {
 
 	public GlobalValues() {
 		maze = new int[11][11][4];
+		img = new int[4];
+		img[0] = R.drawable.level1;
+		img[1] = R.drawable.level2;
+		img[2] = R.drawable.level3;
+		img[3] = R.drawable.level4;
 	}
 
 	void refreshWords(Context context, GameActivity act){
@@ -115,7 +123,7 @@ public class GlobalValues extends Application {
 		if (cursor.moveToFirst()){
 			do {
 				int temp_location = cursor.getInt(cursor.getColumnIndex("location"));
-				int temp_y = (temp_location/10)+1 - (temp_location/100);
+				int temp_y = ((temp_location-1)/10)+1;
 				int temp_x = (temp_location-1)%10+1;
 				mazePtr[temp_x][temp_y][0] = cursor.getInt(cursor.getColumnIndex("up"));
 				mazePtr[temp_x][temp_y][1] = cursor.getInt(cursor.getColumnIndex("down"));
@@ -124,6 +132,11 @@ public class GlobalValues extends Application {
 			}
 			while (cursor.moveToNext());
 		}
+
+		Log.e("WordLib ","WordLib refreshed");
+		Log.e("lexicon ",lexicon);
+		Log.e("level ", Integer.toString(level));
+		Log.e("WordsSize ",Integer.toString(words.size()));
 	}
 
 	void refreshLocation(GameActivity act){

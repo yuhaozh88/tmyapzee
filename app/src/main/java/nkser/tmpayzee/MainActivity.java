@@ -40,6 +40,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this,GameActivity.class);
+				intent.putExtra("start_or_resume", true);
 				startActivity(intent);
 			}
 		});
@@ -50,6 +51,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, GameActivity.class);
+				intent.putExtra("start_or_resume", false);
 				startActivity(intent);
 			}
 		});

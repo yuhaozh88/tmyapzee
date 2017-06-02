@@ -81,66 +81,34 @@ public class GameActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
 
-
 		globalV = (GlobalValues) getApplication();
 
 		pref = getSharedPreferences("game_info",MODE_PRIVATE);
-		globalV.resume_or_not = pref.getBoolean("resume_or_not",false);
 		globalV.lexicon = pref.getString("lexicon","cet6");
 		globalV.coordinate_x = pref.getInt("coor_x",globalV.start_x);
 		globalV.coordinate_y = pref.getInt("coor_y",globalV.start_y);
 		globalV.level = pref.getInt("level",1);
 
-		if (!globalV.resume_or_not){
-			//coordinate_x=globalV.mazeStart[level][1];
-			//coordinate_y=globalV.mazeStart[level][0];
+		Log.e("level ", Integer.toString(globalV.level));
+
+		boolean startOrNot = getIntent().getBooleanExtra("start_or_resume",true);
+		if (startOrNot){
 			globalV.coordinate_x =globalV.start_x;
 			globalV.coordinate_y =globalV.start_y;
 			globalV.level=1;
 			Log.e("coor_x_y",Integer.toString(globalV.coordinate_x)+" "+Integer.toString(globalV.coordinate_y));
 		}
 
+		ImageView mazeImg = (ImageView) findViewById(R.id.mazeMap);
+		mazeImg.setImageResource(globalV.img[globalV.level-1]);
+
 		VocabularyDBhelper dBhelper= new VocabularyDBhelper(this);
 		try {
 			dBhelper.createDataBase();
-//			dBhelper.openDataBase();
-			//dBhelper.close();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-
-////		dBhelper.close();
-//		SQLiteDatabase db = dBhelper.getReadableDatabase();
-//
-//		String[] cols = {"vocabulary"};
-//		String[] levels = {Integer.toString(level)};
-//
-//		Cursor cursor = db.query(globalV.lexicon,cols,"level = ?",levels,null,null,null);
-//
-//		globalV.words = new ArrayList<>(0);
-//		if (cursor.moveToFirst()){
-//			do {
-//				globalV.words.add(cursor.getString(cursor.getColumnIndex("vocabulary")));
-//			}
-//			while (cursor.moveToNext());
-//		}
-//		String[] mazeCols = {"location", "up","down","left","right"};
-//		cursor = db.query("maze",mazeCols,"level = ?",levels, null,null,null);
-//
-//		int[][][] mazePtr = globalV.maze;
-//		if (cursor.moveToFirst()){
-//			do {
-//				int temp_location = cursor.getInt(cursor.getColumnIndex("location"));
-//				int temp_y = (temp_location/10)+1 - (temp_location/100);
-//				int temp_x = (temp_location-1)%10+1;
-//				mazePtr[temp_x][temp_y][0] = cursor.getInt(cursor.getColumnIndex("up"));
-//				mazePtr[temp_x][temp_y][1] = cursor.getInt(cursor.getColumnIndex("down"));
-//				mazePtr[temp_x][temp_y][2] = cursor.getInt(cursor.getColumnIndex("left"));
-//				mazePtr[temp_x][temp_y][3] = cursor.getInt(cursor.getColumnIndex("right"));
-//			}
-//			while (cursor.moveToNext());
-//		}
 
 		globalV.refreshWordsLib();
 		new KeyboardUtil(globalV,this, this).showKeyboard();
@@ -198,8 +166,7 @@ public class GameActivity extends Activity {
 		editor.putString("lexicon",globalV.lexicon);
 		editor.putInt("coor_x",globalV.coordinate_x);
 		editor.putInt("coor_y",globalV.coordinate_y);
-		editor.putInt("level",level);
-		editor.putBoolean("resume_or_not",globalV.resume_or_not);
+		editor.putInt("level",globalV.level);
 		editor.apply();
 
 		super.onDestroy();
@@ -215,7 +182,6 @@ public class GameActivity extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK) {
 			this.finish();
-			globalV.resume_or_not=true;
 		}
 		return super.onKeyDown(keyCode, event);
 	}

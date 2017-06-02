@@ -50,8 +50,12 @@ public class FinishDialog extends Dialog {
 			@Override
 			public void doContinue() {
 				globalV.level++;
-				globalV.resume_or_not = true;
-				act.countTimer();
+				ImageView mazeImg = (ImageView)getOwnerActivity().findViewById(R.id.mazeMap);
+				mazeImg.setImageResource(globalV.img[globalV.level-1]);
+
+				globalV.refreshWordsLib();
+				globalV.timer = globalV.timeRestrict;
+				//act.countTimer();
 				globalV.refreshLocation((GameActivity) getOwnerActivity());
 				globalV.refreshWords(getOwnerActivity(), (GameActivity) getOwnerActivity());
 				dismiss();
@@ -59,7 +63,8 @@ public class FinishDialog extends Dialog {
 
 			@Override
 			public void doRestart() {
-				globalV.resume_or_not = false;
+				globalV.level = 1;
+				globalV.refreshWordsLib();
 				globalV.refreshLocation((GameActivity) getOwnerActivity());
 				act.countTimer();
 				globalV.refreshWords(getOwnerActivity(), (GameActivity) getOwnerActivity());

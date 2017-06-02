@@ -59,7 +59,6 @@ public class GameOverDialog extends Dialog {
 				globalV.coordinate_x =1;
 				globalV.coordinate_y =1;
 				globalV.level =1;
-				globalV.resume_or_not = false;
 				globalV.IsPaused = false;
 				globalV.timer=globalV.timeRestrict;
 				globalV.refreshWordsLib();

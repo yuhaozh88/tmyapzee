@@ -79,14 +79,16 @@
                 android:id="@+id/TextViewUp"
                 android:layout_marginLeft="10dp"
                 android:text="testUp"
-                android:layout_width="wrap_content"
+                android:layout_width="40dp"
+                android:textSize="10dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
             <TextView
                 android:id="@+id/TextViewDown"
                 android:layout_marginLeft="10dp"
                 android:text="testDown"
-                android:layout_width="wrap_content"
+                android:layout_width="40dp"
+                android:textSize="10dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
 
@@ -94,7 +96,8 @@
             <TextView
                 android:id="@+id/TextViewLeft"
                 android:layout_marginLeft="10dp"
-                android:layout_width="wrap_content"
+                android:layout_width="40dp"
+                android:textSize="10dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
 
@@ -102,7 +105,8 @@
                 android:id="@+id/TextViewRight"
                 android:layout_marginLeft="10dp"
                 android:text="testRight"
-                android:layout_width="wrap_content"
+                android:layout_width="40dp"
+                android:textSize="10dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
 
