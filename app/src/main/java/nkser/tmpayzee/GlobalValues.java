@@ -33,6 +33,8 @@ public class GlobalValues extends Application {
 
 	public int img[];
 
+	public boolean whether;
+
 	private static final float wallSize = 23;
 	private static final float gridSize = 72;
 
@@ -93,7 +95,6 @@ public class GlobalValues extends Application {
 			act.strPos[i]=0;
 			SpannableString styledText = new SpannableString(tempWord);
 			styledText.setSpan(new TextAppearanceSpan(context, R.style.UnTypedCharacter), 0, styledText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
 			act.textViewArr[i].setText(styledText, TextView.BufferType.SPANNABLE);
 		}
 

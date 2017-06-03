@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Toast;
+import com.appsee.Appsee;
 
 public class SettingsActivity extends Activity {
 
@@ -16,7 +17,7 @@ public class SettingsActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
-
+		Appsee.start("b60e4460e4a948c39987941614027495");
 		//volume=0.5f;//设置默认打开的音量
 		GlobalValues.player.start();
 

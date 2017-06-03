@@ -31,7 +31,7 @@ public class GameDialog extends Dialog {
 	private ImageView resumeButton;
 	private ImageView restartButton;
 	private ImageView menuButton;
-	private Button muteButton;
+	private ImageView muteButton;
 
 	private ClickListenerInterface clickListenerInterface;
 
@@ -122,7 +122,7 @@ public class GameDialog extends Dialog {
 		resumeButton = (ImageView) view.findViewById(R.id.pause_resume_button);
 		restartButton  = (ImageView) view.findViewById(R.id.pause_restart_button);
 		menuButton  = (ImageView) view.findViewById(R.id.pause_menu_button);
-		muteButton =(Button) view.findViewById(R.id.pause_mute_button);
+		muteButton =(ImageView) view.findViewById(R.id.pause_mute_button);
 
 		resumeButton.setOnClickListener(new clickListener());
 		restartButton.setOnClickListener(new clickListener());

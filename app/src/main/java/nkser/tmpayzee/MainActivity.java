@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import com.appsee.Appsee;
 
 import nkser.tmpayzee.data.VocabularyDBhelper;
 
@@ -21,6 +22,8 @@ public class MainActivity extends Activity {
 		/*
 			Set intent
 		 */
+
+		Appsee.start("b60e4460e4a948c39987941614027495");
 
 		if (! GlobalValues.situation){
 			GlobalValues.volume=0.5f;

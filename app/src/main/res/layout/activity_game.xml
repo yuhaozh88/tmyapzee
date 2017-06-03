@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_game"
     android:layout_width="match_parent"
@@ -11,36 +10,34 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
+
         <ImageView
-        android:id="@+id/pauseIcon"
-        android:layout_width="35dp"
-        android:src="@drawable/pause"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_height="35dp"/>
+            android:id="@+id/pauseIcon"
+            android:layout_width="35dp"
+            android:src="@drawable/pause"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_height="35dp" />
 
         <ImageView
             android:layout_width="115dp"
             android:layout_height="35dp"
-            android:src="@drawable/time_left"
-            android:layout_marginTop = "5dp"
-            android:layout_marginLeft = "30dp"
-
-            android:gravity="center"
-            />
+            android:src="@drawable/timeleft"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="30dp"
+            android:layout_gravity="center" />
 
         <TextView
             android:id="@+id/tv_timer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop = "5dp"
-            android:layout_marginLeft = "5dp"
-            android:gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
             android:text=""
             android:textSize="30dp"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="#00d7fe" />
 
     </LinearLayout>
 
@@ -54,13 +51,13 @@
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:src="@drawable/level1"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true" />
 
         <ImageView
             android:id="@+id/planeImg"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:src="@drawable/plane"/>
+            android:src="@drawable/plane" />
 
     </RelativeLayout>
 
@@ -73,42 +70,88 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@color/textBackground">
+            android:background="#000000">
 
-            <TextView
-                android:id="@+id/TextViewUp"
-                android:layout_marginLeft="10dp"
-                android:text="testUp"
-                android:layout_width="40dp"
-                android:textSize="10dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-            <TextView
-                android:id="@+id/TextViewDown"
-                android:layout_marginLeft="10dp"
-                android:text="testDown"
-                android:layout_width="40dp"
-                android:textSize="10dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ffff"
+                    android:textSize="15dp"
+                    android:text="↑"/>
+                <TextView
+                    android:id="@+id/TextViewUp"
+                    android:text="testUp"
+                    android:layout_width="55dp"
+                    android:textSize="12sp"
+                    android:layout_height="wrap_content"/>
 
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/TextViewLeft"
-                android:layout_marginLeft="10dp"
-                android:layout_width="40dp"
-                android:textSize="10dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ffff"
+                    android:textSize="15dp"
+                    android:text="↓"/>
+                <TextView
+                    android:id="@+id/TextViewDown"
+                    android:text="testDown"
+                    android:layout_width="55dp"
+                    android:textSize="12sp"
+                    android:layout_height="wrap_content"/>
 
-            <TextView
-                android:id="@+id/TextViewRight"
-                android:layout_marginLeft="10dp"
-                android:text="testRight"
-                android:layout_width="40dp"
-                android:textSize="10dp"
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ffff"
+                    android:textSize="15dp"
+                    android:text="←"/>
+                <TextView
+                    android:id="@+id/TextViewLeft"
+                    android:layout_width="55dp"
+                    android:textSize="10dp"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ffff"
+                    android:textSize="15dp"
+                    android:text="→"/>
+                <TextView
+                    android:id="@+id/TextViewRight"
+                    android:text="testRight"
+                    android:layout_width="55dp"
+                    android:textSize="12sp"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -118,7 +161,7 @@
             android:layout_height="wrap_content"
             android:background="@color/transparent"
             android:focusable="true"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal" />
 
     </LinearLayout>
 

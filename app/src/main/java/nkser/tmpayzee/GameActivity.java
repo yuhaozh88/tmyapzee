@@ -1,5 +1,6 @@
 package nkser.tmpayzee;
 
+import com.appsee.Appsee;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -72,8 +73,9 @@ public class GameActivity extends Activity {
 					tempdialog.setCancelable(false);
 				}
 			}
-			countTimer();
-
+			if (globalV.whether){
+				countTimer();
+			}
 		}
 	};
 
@@ -82,6 +84,8 @@ public class GameActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
 
+		Appsee.start("b60e4460e4a948c39987941614027495");
+
 		globalV = (GlobalValues) getApplication();
 
 		pref = getSharedPreferences("game_info",MODE_PRIVATE);
@@ -89,7 +93,7 @@ public class GameActivity extends Activity {
 		globalV.coordinate_x = pref.getInt("coor_x",globalV.start_x);
 		globalV.coordinate_y = pref.getInt("coor_y",globalV.start_y);
 		globalV.level = pref.getInt("level",1);
-
+		globalV.timer = pref.getLong("time_left",globalV.timeRestrict);
 		Log.e("level ", Integer.toString(globalV.level));
 
 		boolean startOrNot = getIntent().getBooleanExtra("start_or_resume",true);
@@ -97,6 +101,7 @@ public class GameActivity extends Activity {
 			globalV.coordinate_x =globalV.start_x;
 			globalV.coordinate_y =globalV.start_y;
 			globalV.level=1;
+			globalV.timer = globalV.timeRestrict;
 			Log.e("coor_x_y",Integer.toString(globalV.coordinate_x)+" "+Integer.toString(globalV.coordinate_y));
 		}
 
@@ -131,11 +136,12 @@ public class GameActivity extends Activity {
 		globalV.refreshLocation(this);
 
 		globalV.IsPaused =false;
-		globalV.timer = globalV.timeRestrict;
 		tv_timer = (TextView) findViewById(R.id.tv_timer);
 
-		countTimer();
-
+		if (!globalV.whether) {
+			countTimer();
+			globalV.whether =true;
+		}
 		ImageView pauseIcon = (ImageView)findViewById(R.id.pauseIcon);
 		class templistener implements View.OnClickListener
 		{
@@ -172,8 +178,10 @@ public class GameActivity extends Activity {
 		editor.putInt("coor_x",globalV.coordinate_x);
 		editor.putInt("coor_y",globalV.coordinate_y);
 		editor.putInt("level",globalV.level);
+		editor.putLong("time_left",globalV.timer);
 		editor.apply();
 
+		globalV.whether = false;
 		super.onDestroy();
 	}
 

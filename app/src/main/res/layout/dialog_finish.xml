@@ -13,13 +13,21 @@
             android:layout_width="300dp"
             android:layout_gravity="center"
             android:layout_height="150dp"
-            android:src="@drawable/gameover"
+            android:src="@drawable/score"
             android:layout_marginTop="40dp"
             android:layout_weight="0.40"/>
         <TextView
             android:id="@+id/score_text"
             android:layout_width="wrap_content"
             android:text=""
+            android:layout_gravity="center"
+            android:textSize="100dp"
+            android:fontFamily="cursive"
+            android:textColor="@color/colorAccent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="10000"
             android:layout_gravity="center"
             android:textSize="100dp"
             android:fontFamily="cursive"

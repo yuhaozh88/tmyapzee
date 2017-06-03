@@ -4,13 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import com.appsee.Appsee;
 
 public class WelcomeActivity extends Activity {
+
+	GlobalValues globalV;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_welcome);
+		Appsee.start("b60e4460e4a948c39987941614027495");
 		new Handler().postDelayed(new Runnable() {
 
 			@Override
@@ -19,23 +23,10 @@ public class WelcomeActivity extends Activity {
 				startActivity(intent);
 				WelcomeActivity.this.finish();
 			}
-		}, 2000);
-	//	mHandler.sendEmptyMessageAtTime(GOTO_MAIN_ACTIVITY, 3000);//3秒跳转
+		}, 1500);
+
+		globalV = (GlobalValues) getApplication();
+		globalV.whether = false;
 	}
 
-	private static final int GOTO_MAIN_ACTIVITY = 0;
-	private Handler mHandler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
-			switch (msg.what) {
-				case GOTO_MAIN_ACTIVITY:
-					Intent intent = new Intent();
-					intent.setClass(WelcomeActivity.this, MainActivity.class);
-					startActivity(intent);
-					finish();
-					break;
-				default:
-					break;
-			}
-		}
-	};
 }

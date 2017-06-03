@@ -124,6 +124,7 @@ public class FinishDialog extends Dialog {
 
 		scoreText = (TextView) view.findViewById(R.id.score_text);
 		int score = (int)(Math.sqrt((double)(globalV.level))*globalV.timer);
+		RankActivity.score=score;//send the score to RankActivity
 		scoreText.setText(Integer.toString(score));
 
 		globalV.coordinate_x = globalV.start_x;
